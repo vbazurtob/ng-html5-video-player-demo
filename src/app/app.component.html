@@ -1,0 +1,67 @@
+
+<h2>Video Player</h2>
+<div id="videoplayer_widget">
+  <div class="video_player_container">
+    <video  #videoPlayer video id="videoplayer" controls preload="metadata" width="750px" height="540px"></video>
+    <div class="controls"></div>
+    <div class="list_clips">
+    </div>
+  </div>
+  <div class="playlist_container">
+    <div *ngFor="let video of listVideos; let idx = index">
+        
+        <mat-card>
+          <div>
+            <button type="button" mat-button><mat-icon>close</mat-icon></button>
+          </div>
+          <a  mat-button routerLink="." (click)="selectClip($event, idx)" data-full-video="true" [attr.data-index]="idx">
+            <div class="clip_thumb">
+
+            </div>
+            <div>
+              {{video.name}}
+            </div>
+          </a>
+          <div>
+            <button type="button" mat-button (click)="editClip($event,idx)">
+              <mat-icon>edit</mat-icon>
+            </button>
+          </div>
+        </mat-card>
+        <!-- <div> -->
+          
+        <!-- </div> -->
+      </div>
+  </div>
+</div>
+
+
+<div id="new_clip_form">
+  <form id="frmClip" >
+    <mat-form-field>
+        Name
+        <input type="text" id="clipNameTxt" matInput (input)="frmClipName = $event.target.value;"  [value] ="frmClipName" required />
+    </mat-form-field>
+    <mat-form-field>
+        From
+        <input type="number" id="clipStart" matInput  (input)="frmClipStart = $event.target.value;" [value]="frmClipStart"  required />
+    </mat-form-field>
+    <mat-form-field>
+        To
+        <input type="number" id="clipEnd" matInput (input)="frmClipEnd= $event.target.value" [value]="frmClipEnd" required />
+    </mat-form-field>
+    
+    <button type="button" id="addNewClipBtn" mat-button (click)="addClip($event)" >
+        <mat-icon>add</mat-icon>
+    </button>
+    <button type="button" id="editClipBtn" mat-button (click)="applyEditChangesClip($event)" >
+        <mat-icon>apply</mat-icon>
+    </button>
+    <button type="button" id="editClipBtn" mat-button (click)="cancelEditClip($event)" >
+        <mat-icon>cancel</mat-icon>
+    </button>
+    <input type="hidden" #currentEditClip>
+  </form>
+ 
+  
+</div>
