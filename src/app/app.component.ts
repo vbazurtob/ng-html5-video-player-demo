@@ -11,10 +11,19 @@ export class AppComponent implements OnInit {
   public frmClipName ="";
   public frmClipStart= 0;
   public frmClipEnd = 0;
-
+  public maxDurationValue = 0;
 
   @ViewChild("videoPlayer") videoPlayer;
   @ViewChild("currentEditClip") currentClipEdit;
+  @ViewChild("clipFormContainer") clipFormContainer;
+  @ViewChild("frmClip") frmClip;
+  @ViewChild("errorClipNameTxt") errorClipNameTxt;
+  @ViewChild("errorClipStart") errorClipStart;
+  @ViewChild("errorClipEnd") errorClipEnd;
+  
+
+  
+  
 
   public listVideos = [{
     "name": "Blender Demo - Full Video",
@@ -27,12 +36,9 @@ export class AppComponent implements OnInit {
   ngOnInit(){
     const  video = this.videoPlayer.nativeElement;
 
-
-    video.addEventListener("loadedmetadata", function() {
-      //Disable adding or deleting clips UI Here
-
-      // Here you will get a valid duration now.
-      console.log("Video duration now: " + video.duration);
+    video.addEventListener("loadedmetadata", () => {
+      // console.log('m duration ' + this.maxDurationValue);
+      this.maxDurationValue = video.duration;
     });
 
 
@@ -69,19 +75,18 @@ export class AppComponent implements OnInit {
 
   public addClip(evt){
     const btnAdd = evt.target;
-    const frmClip = btnAdd.parent;
+    // const frmClip = document.getElementById('frmClip');
 
-    // console.log(btnAdd);
+    // checkValidity()
+    console.log('frm parent ' + evt.target);
+    console.log( this.frmClip );
+    
+    if ( this.frmClip.nativeElement.checkValidity() === false ) {
+      return false;
+    }
 
-    // console.log(
-    //   this.frmClipName, this.frmClipStart, this.frmClipEnd
-    // );
-
-
-    // console.log(this.listVideos[0].url);
     const clipUrl = this.listVideos[0].url + "#t="+ this.frmClipStart + "," + this.frmClipEnd; 
-    // console.log(clipUrl);
-
+    
     this.listVideos.push(
       {
         "name": this.frmClipName,
@@ -91,6 +96,7 @@ export class AppComponent implements OnInit {
         "url": clipUrl
       }
     );
+    this.hideNewClipUI();
   }
 
   public editClip(evt, idx){
@@ -105,6 +111,35 @@ export class AppComponent implements OnInit {
 
   }
   
+  public isClipFullVideo(idx){
+    return this.listVideos[idx].full === true;
+  }
 
+  public showAddNewClipUI(){
+    const frmClip = this.clipFormContainer.nativeElement;
+    frmClip.style.transform= 'scale(1,1)';
+
+    this.frmClipName = ''
+    this.frmClipStart = 0;
+    this.frmClipEnd = 0;
+
+  }
+
+  public hideNewClipUI(){
+    const frmClip = this.clipFormContainer.nativeElement;
+    frmClip.style.transform= 'scale(1,0)';
+  }
+
+  public cancelEditClip($evt){
+    this.hideNewClipUI();
+  }
+
+
+  public isMetadataAvailable(){
+
+    console.log('UI check ' + this.videoPlayer.nativeElement.duration);
+
+    return !isNaN(this.videoPlayer.nativeElement.duration); 
+  }
 
 }

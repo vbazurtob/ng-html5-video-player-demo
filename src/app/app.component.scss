@@ -1,0 +1,16 @@
+.video_player_container{
+    width: 60%;
+}
+
+.playlist_container{
+    width: 40%;
+}
+
+#clip_form_container{
+    transform: scale(1, 0);
+
+    transition-timing-function: ease-in;
+    /* Quick on the way out */
+    transition: 0.2s;
+
+}

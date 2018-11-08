@@ -1,17 +1,37 @@
 
+<div *ngIf="isMetadataAvailable()==false">
+  <mat-progress-spinner
+        class="example-margin"
+        color="accent"
+        mode="indeterminate"
+        >
+    
+    </mat-progress-spinner>
+    Loading metadata...
+</div>
+
 <h2>Video Player</h2>
-<div id="videoplayer_widget">
-  <div class="video_player_container">
+<div id="videoplayer_widget" fxLayout="row" fxLayoutAlign="start center">
+  <div class="video_player_container" fxLayout="column" fxLayoutAlign="start stretch" >
     <video  #videoPlayer video id="videoplayer" controls preload="metadata" width="750px" height="540px"></video>
-    <div class="controls"></div>
-    <div class="list_clips">
+    <!-- <div class="controls">
+
     </div>
+    <div class="list_clips">
+
+    </div> -->
   </div>
-  <div class="playlist_container">
-    <div *ngFor="let video of listVideos; let idx = index">
-        
-        <mat-card>
-          <div>
+  <div class="playlist_container" fxLayout="column" fxLayoutAlign="start stretch" >
+
+    <div class="playlist_menu">
+      <button type="button" mat-button title="Add a new clip" (click)="showAddNewClipUI()">
+          <mat-icon>add_box</mat-icon>
+      </button>
+
+    </div>
+    
+        <mat-card *ngFor="let video of listVideos; let idx = index"  fxLayout="column" fxLayoutAlign="start stretch" >
+          <div *ngIf="!isClipFullVideo(idx)">
             <button type="button" mat-button><mat-icon>close</mat-icon></button>
           </div>
           <a  mat-button routerLink="." (click)="selectClip($event, idx)" data-full-video="true" [attr.data-index]="idx">
@@ -23,32 +43,34 @@
             </div>
           </a>
           <div>
-            <button type="button" mat-button (click)="editClip($event,idx)">
+            <button type="button" mat-button (click)="editClip($event,idx)" *ngIf="!isClipFullVideo(idx)">
               <mat-icon>edit</mat-icon>
             </button>
           </div>
         </mat-card>
-        <!-- <div> -->
-          
-        <!-- </div> -->
-      </div>
+
   </div>
 </div>
 
 
-<div id="new_clip_form">
-  <form id="frmClip" >
+<div id="clip_form_container" #clipFormContainer>
+  <form id="frmClip" #frmClip >
     <mat-form-field>
         Name
         <input type="text" id="clipNameTxt" matInput (input)="frmClipName = $event.target.value;"  [value] ="frmClipName" required />
+        <label for="clipNameTxt" #errorClipNameTxt ></label>
     </mat-form-field>
     <mat-form-field>
         From
-        <input type="number" id="clipStart" matInput  (input)="frmClipStart = $event.target.value;" [value]="frmClipStart"  required />
+        <input type="number" id="clipStart" matInput  (input)="frmClipStart = $event.target.value;" [value]="frmClipStart" [max]="maxDurationValue"   required />
+        <label for="clipNameTxt" #errorClipStart ></label>
+
     </mat-form-field>
     <mat-form-field>
         To
-        <input type="number" id="clipEnd" matInput (input)="frmClipEnd= $event.target.value" [value]="frmClipEnd" required />
+        <input type="number" id="clipEnd" matInput (input)="frmClipEnd= $event.target.value" [value]="frmClipEnd" [max]="maxDurationValue" required />
+        <label for="clipNameTxt" #errorClipEnd ></label>
+
     </mat-form-field>
     
     <button type="button" id="addNewClipBtn" mat-button (click)="addClip($event)" >
