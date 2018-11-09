@@ -1,41 +1,51 @@
-<form id="frmClip"  [formGroup]="frmClipEditor" >
-  <mat-form-field>
-      Name
-      <input formControlName="name"  type="text" id="clipNameTxt" matInput  />
-      <mat-error *ngIf="name.invalid">{{getErrorMessage('name')}}</mat-error>
-  </mat-form-field>
-  <mat-form-field>
-      From
-      <input formControlName="start" type="number" id="clipStart" matInput />
-      <mat-error *ngIf="start.invalid">{{getErrorMessage('start')}}</mat-error>
+<mat-card class="frm-edit-clip-card">
+  <h3>{{frmTitle}}</h3>
+  <div fxLayout="row" fxLayoutAlign="end start">
+    <span #btnCancel>
+      <button title="Cancel and hide this form"  type="button" id="editClipBtn" mat-button (click)="cancelEditClipEvt($event)" >
+          <mat-icon  color="primary">clear</mat-icon>
+      </button>
+    </span>
+  </div>
+  <form id="frmClip"  [formGroup]="frmClipEditor" fxLayout="column" fxLayoutAlign="start stretch" >
+    <div fxLayout="row" fxLayoutAlign="space-between start">
+      <mat-form-field>
+          <input placeholder="Clip Name" formControlName="name"  type="text" id="clipNameTxt" matInput  />
+          <mat-error *ngIf="name.invalid">{{getErrorMessage('name')}}</mat-error>
+      </mat-form-field>
+      <mat-form-field>
 
-  </mat-form-field>
-  <mat-form-field>
-      To
-      <input formControlName="end" type="number" id="clipEnd" matInput  />
-      <mat-error *ngIf="end.invalid">{{getErrorMessage('end')}}</mat-error>
+          <input placeholder="Start time (in seconds)"  formControlName="start" type="number" id="clipStart" matInput />
+          <mat-error *ngIf="start.invalid">{{getErrorMessage('start')}}</mat-error>
 
-  </mat-form-field>
+      </mat-form-field>
+      <mat-form-field>
+          <input placeholder="End time (in seconds)" formControlName="end" type="number" id="clipEnd" matInput  />
+          <mat-error *ngIf="end.invalid">{{getErrorMessage('end')}}</mat-error>
+
+      </mat-form-field>
+    </div>
+
+    <div fxLayout="row" fxLayoutAlign="start start" fxLayoutGap="15px" >
+      <span #btnAdd>
+        <button title="Add new clip"  type="button" id="addNewClipBtn" mat-button (click)="addClipEvt($event)" [disabled]="!isFormValid()" >
+            <mat-icon  color="primary">add</mat-icon>
+        </button>
+      </span>
 
 
-  <span #btnAdd>
-    <button  type="button" id="addNewClipBtn" mat-button (click)="addClipEvt($event)" [disabled]="!isFormValid()" >
-        <mat-icon>add</mat-icon>
-    </button>
-  </span>
+      <span #btnEdit>
+        <button title="Apply changes to clip"  type="button" id="editClipBtn" mat-button (click)="applyEditChangesEvt($event)" [disabled]="!isFormValid()"  >
+            <mat-icon  color="primary">done</mat-icon>
+        </button>
+      </span>
 
 
-  <span #btnEdit>
-    <button  type="button" id="editClipBtn" mat-button (click)="applyEditChangesEvt($event)" [disabled]="!isFormValid()"  >
-        <mat-icon>done</mat-icon>
-    </button>
-  </span>
 
-  <span #btnCancel>
-    <button  type="button" id="editClipBtn" mat-button (click)="cancelEditClipEvt($event)" >
-        <mat-icon>cancel</mat-icon>
-    </button>
-  </span>
+      <input type="hidden" #currentEditClip>
+    </div>
 
-  <input type="hidden" #currentEditClip>
-</form>
+
+
+  </form>
+</mat-card>

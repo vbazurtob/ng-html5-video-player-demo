@@ -12,6 +12,7 @@ import { isClipRangeValid } from '../validators/clip-range.validator';
 export class ClipEditorComponent implements OnInit {
 
   @Input() videoDuration;
+  @Input() frmTitle;
   @Output() addClip = new EventEmitter();
   @Output() cancelClip = new EventEmitter();
   @Output() editClip = new EventEmitter();
@@ -125,7 +126,7 @@ export class ClipEditorComponent implements OnInit {
         message = this.frm[fieldName].hasError('min') ? 'Value cannot be lesser than 0' :
           this.frm[fieldName].hasError('max') ? 'Value cannot be greater than ' + this.videoDuration
           :
-          this.frm[fieldName].hasError('rangeNotValid')? 'Starting value from the clip cannot be greater than the ending value'
+          this.frm[fieldName].hasError('rangeNotValid')? 'Starting value from the clip cannot be greater or equals than the ending value'
           : ''  ;
        break;
      }

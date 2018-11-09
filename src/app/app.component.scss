@@ -4,7 +4,20 @@
 
 .playlist_container{
     width: 40%;
+    padding-left: 15px;
 }
+
+.progress-loader-container{
+  width: 100%;
+}
+
+// #videContainerElement {
+//   transform: scale(1, 1);
+//   transition-timing-function: ease-in;
+//   transition: 0.2s;
+//
+//   width: 60%;
+// }
 
 #clip_form_container{
     transform: scale(1, 0);
@@ -16,7 +29,8 @@
 }
 
 .video-container-hidden{
-  visibility: hidden;
+  // visibility: hidden;
+  display: none;
 }
 
 .card-clip{

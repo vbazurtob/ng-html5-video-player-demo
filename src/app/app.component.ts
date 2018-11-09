@@ -8,10 +8,6 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 })
 export class AppComponent implements OnInit {
   title = 'html5videoplayer';
-
-  // public frmClipName ="";
-  // public frmClipStart= 0;
-  // public frmClipEnd = 0;
   public maxDurationValue = 0;
 
   @ViewChild("videoPlayer") videoPlayer;
@@ -24,12 +20,8 @@ export class AppComponent implements OnInit {
   @ViewChild("videoContainerElement") videoContainerElement;
 
 
-
-
-
-// Array  plauylist
   public listVideos = [];
-
+  public frmTitle = "";
   ngOnInit(){
 
     // init video playlist array
@@ -53,7 +45,6 @@ export class AppComponent implements OnInit {
         this.frmClip.updateValidatorsWithMaxDuration(this.maxDurationValue);
 
         this.showVideoContainer();
-        console.log('CREATE CLIPS');
 
         if(this.listVideos.length == 1){
           this.createClipsFromVideo();
@@ -82,6 +73,7 @@ export class AppComponent implements OnInit {
     video.innerHTML = '';
 
 
+
     this.addVideoSrc(this.videoPlayer.nativeElement, this.listVideos[idx].url, 'video/mp4');
     video.load();
     video.play();
@@ -91,14 +83,6 @@ export class AppComponent implements OnInit {
 
   public addClip( evt ){
     const frm = evt;
-
-
-    ////////////////// TODO VALIDATE start < end //////////////////////////
-
-    // if ( this.frmClip.isFormValid() === false ) {
-    //   return false;
-    // }
-
     const clipUrl = this.listVideos[0].url + "#t="+ frm.start + "," + frm.end;
     frm.url = clipUrl;
 
@@ -117,6 +101,9 @@ export class AppComponent implements OnInit {
     this.frmClip.hideAddButton();
     this.frmClip.showEditButton();
 
+    this.hideVideoContainer();
+
+    this.frmTitle = "Editing clip: " + selectedClip.name;
   }
 
   private deleteClip(evt, idx){
@@ -136,8 +123,12 @@ export class AppComponent implements OnInit {
     const emptyFrm = this.getEmptyFrmObject();
     this.frmClip.setFrmValues( emptyFrm );
 
+    this.hideVideoContainer();
+
     this.frmClip.showAddButton();
     this.frmClip.hideEditButton();
+
+    this.frmTitle = "Create a new clip";
   }
 
   public getEmptyFrmObject(){
@@ -158,6 +149,7 @@ export class AppComponent implements OnInit {
     this.frmClip.showAddButton();
     this.frmClip.hideEditButton();
 
+    this.showVideoContainer();
   }
 
   public cancelEditClip($evt){
@@ -172,13 +164,13 @@ export class AppComponent implements OnInit {
   public showVideoContainer()
   {
     const videoContainerDOM = this.videoContainerElement.nativeElement;
-    videoContainerDOM.style.visibility='visible';
+    videoContainerDOM.style.display='block';
   }
 
   public hideVideoContainer()
   {
     const videoContainerDOM = this.videoContainerElement.nativeElement;
-    videoContainerDOM.style.visibility='hidden';
+    videoContainerDOM.style.display='none';
   }
 
 
@@ -208,12 +200,6 @@ export class AppComponent implements OnInit {
     const frm = evt;
     const clipToEdit = this.listVideos[idx]
 
-    ////////////////// TODO VALIDATE start < end //////////////////////////
-
-    // if ( this.frmClip.isFormValid() === false ) {
-    //   return false;
-    // }
-
     clipToEdit.name = frm.name;
     clipToEdit.start = frm.start;
     clipToEdit.end = frm.end;
@@ -227,7 +213,15 @@ export class AppComponent implements OnInit {
 
   }
 
-
+  // hideVideoContainer(){
+  //  const videoContainer = this.videoContainerElement.nativeElement;
+  //  videoContainer.style.transform= 'scale(1,0)';
+  // }
+  //
+  // showVideoContainer(){
+  //  const videoContainer = this.videoContainerElement.nativeElement;
+  //  videoContainer.style.transform= 'scale(1,1)';
+  // }
 
 
 }

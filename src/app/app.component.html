@@ -1,40 +1,53 @@
 
-<div *ngIf="isMetadataAvailable()==false">
-  <mat-progress-spinner
-        class="example-margin"
-        color="accent"
-        mode="indeterminate"
-        >
-
-    </mat-progress-spinner>
-    Loading metadata...
+<div class="progress-loader-container" *ngIf="isMetadataAvailable()==false" fxLayout="column" fxLayoutAlign="center center">
+    <mat-progress-spinner
+          class="example-margin"
+          color="accent"
+          mode="indeterminate"></mat-progress-spinner>
+    <div>
+      Loading video metadata...
+    </div>
 </div>
 
-<div class="video-container-hidden" #videoContainerElement>
-  <h2>Video Player</h2>
-  <div id="videoplayer_widget" fxLayout="row" fxLayoutAlign="start center">
+<div   class="video-container-hidden" #videoContainerElement>
+  <h2>Angular HTML5 Video Player (Media fragments examples)</h2>
+  <p>
+    Author: Voltaire Bazurto Blacio <br>
+    2018
+  </p>
+
+  <div id="videoplayer_widget" fxLayout="row" fxLayoutAlign="start start" >
     <div class="video_player_container" fxLayout="column" fxLayoutAlign="start stretch" >
-      <video  #videoPlayer video id="videoplayer" controls preload="metadata" width="750px" height="540px"></video>
-      <!-- <div class="controls">
-
-      </div>
-      <div class="list_clips">
-
-      </div> -->
+      <video  #videoPlayer video id="videoplayer" controls preload="metadata" width="100%" height="100%" >
+      </video>
     </div>
-    <div class="playlist_container" fxLayout="column" fxLayoutAlign="space-around stretch" >
+
+
+    <div class="playlist_container" fxLayout="column" fxLayoutAlign="start stretch"  >
 
       <div class="playlist_menu">
         <button type="button" mat-button title="Add a new clip" (click)="showAddNewClipUI()">
-            <mat-icon>add_box</mat-icon>
+            <mat-icon color="primary">add_box</mat-icon>
         </button>
 
       </div>
 
-          <mat-card *ngFor="let video of listVideos; let idx = index"  fxLayout="column" fxLayoutAlign="start stretch" class="card-clip" >
-            <div *ngIf="!isClipFullVideo(idx)">
-              <button type="button" (click)="deleteClip($event, idx)"  mat-button><mat-icon>close</mat-icon></button>
+      <mat-card *ngFor="let video of listVideos; let idx = index"  fxLayout="column" fxLayoutAlign="start stretch" class="card-clip" >
+
+            <div fxLayout="row" fxLayoutAlign="start start" fxLayoutGap="10px">
+              <div *ngIf="!isClipFullVideo(idx)">
+                <button  type="button" (click)="deleteClip($event, idx)"  mat-button>
+                  <mat-icon color="primary" title="Remove clip">close</mat-icon>
+                </button>
+              </div>
+              <div>
+                <button type="button" mat-button (click)="editClip($event,idx)" *ngIf="!isClipFullVideo(idx)">
+                  <mat-icon color="primary" title="Edit clip">edit</mat-icon>
+                </button>
+              </div>
             </div>
+
+
             <button type="button" mat-button
             (click)="selectClip($event, idx) " data-full-video="true"
             [attr.data-index]="idx">
@@ -46,28 +59,22 @@
               </div>
             </button>
 
-            <div>
-              <button type="button" mat-button (click)="editClip($event,idx)" *ngIf="!isClipFullVideo(idx)">
-                <mat-icon>edit</mat-icon>
-              </button>
-            </div>
-          </mat-card>
+
+      </mat-card>
 
     </div>
   </div>
+</div>
 
+<div id="clip_form_container" #clipFormContainer>
 
-  <div id="clip_form_container" #clipFormContainer>
-
-    <app-clip-editor [videoDuration]="maxDurationValue"
-
+  <app-clip-editor [videoDuration]="maxDurationValue"
+[frmTitle] = "frmTitle"
 (addClip) = "addClip($event)"
 (editClip) = "updateClip($event)"
 (cancelClip) = "cancelEditClip($event)"
 
 #frmClip
-    ></app-clip-editor>
-
-  </div>
+  ></app-clip-editor>
 
 </div>
