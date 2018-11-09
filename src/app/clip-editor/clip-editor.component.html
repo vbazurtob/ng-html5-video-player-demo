@@ -1,0 +1,30 @@
+<form id="frmClip"  [formGroup]="frmClipEditor" >
+  <mat-form-field>
+      Name
+      <input formControlName="name"  type="text" id="clipNameTxt" matInput  />
+      <mat-error *ngIf="name.invalid">{{getErrorMessage('name')}}</mat-error>
+  </mat-form-field>
+  <mat-form-field>
+      From
+      <input formControlName="start" type="number" id="clipStart" matInput />
+      <mat-error *ngIf="start.invalid">{{getErrorMessage('start')}}</mat-error>
+
+  </mat-form-field>
+  <mat-form-field>
+      To
+      <input formControlName="end" type="number" id="clipEnd" matInput  />
+      <mat-error *ngIf="end.invalid">{{getErrorMessage('end')}}</mat-error>
+
+  </mat-form-field>
+
+  <button type="button" id="addNewClipBtn" mat-button (click)="addClipEvt($event)" [disabled]="!isFormValid()" >
+      <mat-icon>add</mat-icon>
+  </button>
+  <button type="button" id="editClipBtn" mat-button (click)="applyEditChangesEvt($event)" >
+      <mat-icon>done</mat-icon>
+  </button>
+  <button type="button" id="editClipBtn" mat-button (click)="cancelEditClipEvt($event)" >
+      <mat-icon>cancel</mat-icon>
+  </button>
+  <input type="hidden" #currentEditClip>
+</form>

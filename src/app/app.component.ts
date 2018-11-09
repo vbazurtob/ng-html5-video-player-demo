@@ -8,9 +8,9 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 export class AppComponent implements OnInit {
   title = 'html5videoplayer';
 
-  public frmClipName ="";
-  public frmClipStart= 0;
-  public frmClipEnd = 0;
+  // public frmClipName ="";
+  // public frmClipStart= 0;
+  // public frmClipEnd = 0;
   public maxDurationValue = 0;
 
   @ViewChild("videoPlayer") videoPlayer;
@@ -20,10 +20,12 @@ export class AppComponent implements OnInit {
   @ViewChild("errorClipNameTxt") errorClipNameTxt;
   @ViewChild("errorClipStart") errorClipStart;
   @ViewChild("errorClipEnd") errorClipEnd;
-  
+  @ViewChild("videoContainerElement") videoContainerElement;
 
-  
-  
+
+
+
+
 
   public listVideos = [{
     "name": "Blender Demo - Full Video",
@@ -34,26 +36,33 @@ export class AppComponent implements OnInit {
   }];
 
   ngOnInit(){
-    const  video = this.videoPlayer.nativeElement;
+    if(this.videoPlayer) {
+      const  video = this.videoPlayer.nativeElement;
 
-    video.addEventListener("loadedmetadata", () => {
-      // console.log('m duration ' + this.maxDurationValue);
-      this.maxDurationValue = video.duration;
-    });
+      // Wait until video metadata is loaded
+      video.addEventListener("loadedmetadata", () => {
+        this.maxDurationValue = video.duration;
 
+        this.frmClip.updateValidatorsWithMaxDuration(this.maxDurationValue);
 
-    // console.log(this.videoPlayer.nativeElement.duration);
+        this.showVideoContainer();
+        console.log('CREATE CLIPS');
+        this.createClipsFromVideo();
 
-    this.addVideoSrc(this.videoPlayer.nativeElement, this.listVideos[0].url, 'video/mp4');
+      });
+
+      //Load First video of playlist
+      this.addVideoSrc(this.videoPlayer.nativeElement, this.listVideos[0].url, 'video/mp4');
+
+    }
+
 
   }
 
   public addVideoSrc(video, urlSource, mediatype){
-      let source = document.createElement('source');
-  
+      const source = document.createElement('source');
       source.src = urlSource;
       source.type = mediatype;
-  
       video.appendChild(source);
   }
 
@@ -73,56 +82,56 @@ export class AppComponent implements OnInit {
     video.play();
   }
 
-  public addClip(evt){
-    const btnAdd = evt.target;
-    // const frmClip = document.getElementById('frmClip');
+  public addClip( evt ){
+    const frm = evt;
 
-    // checkValidity()
-    console.log('frm parent ' + evt.target);
-    console.log( this.frmClip );
-    
-    if ( this.frmClip.nativeElement.checkValidity() === false ) {
-      return false;
-    }
+    // if ( this.frmClip.isFormValid() === false ) {
+    //   return false;
+    // }
 
-    const clipUrl = this.listVideos[0].url + "#t="+ this.frmClipStart + "," + this.frmClipEnd; 
-    
-    this.listVideos.push(
-      {
-        "name": this.frmClipName,
-        "start": this.frmClipStart,
-        "end": this.frmClipEnd,
-        "full": false,
-        "url": clipUrl
-      }
-    );
+    const clipUrl = this.listVideos[0].url + "#t="+ frm.start + "," + frm.end;
+    frm.url = clipUrl;
+
+    this.listVideos.push( frm );
     this.hideNewClipUI();
   }
 
   public editClip(evt, idx){
     const selectedClip = this.listVideos[idx];
 
-    this.frmClipName = selectedClip.name
-    this.frmClipStart = selectedClip.start;
-    this.frmClipEnd = selectedClip.end;
+    // this.frmClipName = selectedClip.name
+    // this.frmClipStart = selectedClip.start;
+    // this.frmClipEnd = selectedClip.end;
 
     const currentEdit = document.getElementById("currentEditClip");
     this.currentClipEdit.nativeElement.value = idx;
 
   }
-  
+
   public isClipFullVideo(idx){
     return this.listVideos[idx].full === true;
   }
 
   public showAddNewClipUI(){
-    const frmClip = this.clipFormContainer.nativeElement;
-    frmClip.style.transform= 'scale(1,1)';
+    const frmClipContainer = this.clipFormContainer.nativeElement;
+    frmClipContainer.style.transform= 'scale(1,1)';
+    const emptyFrm = this.getEmptyFrmObject();
+    // emptyFrm.end = this.maxDurationValue;
 
-    this.frmClipName = ''
-    this.frmClipStart = 0;
-    this.frmClipEnd = 0;
+    console.log(emptyFrm);
 
+    this.frmClip.setFrmValues( emptyFrm );
+
+  }
+
+  public getEmptyFrmObject(){
+    return {
+      "name": "",
+      "url": "",
+      "full": false,
+      "start": 0,
+      "end": 0
+    };
   }
 
   public hideNewClipUI(){
@@ -136,10 +145,41 @@ export class AppComponent implements OnInit {
 
 
   public isMetadataAvailable(){
-
-    console.log('UI check ' + this.videoPlayer.nativeElement.duration);
-
-    return !isNaN(this.videoPlayer.nativeElement.duration); 
+      return !isNaN(this.videoPlayer.nativeElement.duration);
   }
+
+  public showVideoContainer()
+  {
+    const videoContainerDOM = this.videoContainerElement.nativeElement;
+    videoContainerDOM.style.visibility='visible';
+  }
+
+  public hideVideoContainer()
+  {
+    const videoContainerDOM = this.videoContainerElement.nativeElement;
+    videoContainerDOM.style.visibility='hidden';
+  }
+
+
+  public createClipsFromVideo(){
+    const clipsLength = this.maxDurationValue / 5;
+    let i, acumStart = 0;
+    for(i=0; i < 5; i++ ){
+
+
+      const newFrm = this.getEmptyFrmObject();
+      newFrm.name = 'Clip ' + (i+1);
+      newFrm.start = acumStart;
+      newFrm.end = newFrm.start + clipsLength;
+      acumStart = newFrm.start + clipsLength;
+
+      console.log(newFrm);
+
+      this.addClip(newFrm);
+
+    }
+
+  }
+
 
 }
