@@ -26,16 +26,22 @@ export class AppComponent implements OnInit {
 
 
 
-
-  public listVideos = [{
-    "name": "Blender Demo - Full Video",
-    "url": "https://download.blender.org/durian/trailer/sintel_trailer-480p.mp4",
-    "full": true,
-    "start": 0,
-    "end": 0
-  }];
+// Array  plauylist
+  public listVideos = [];
 
   ngOnInit(){
+
+    // init video playlist array
+    this.listVideos = [{
+     "name": "Blender Demo - Full Video",
+     "url": "https://download.blender.org/durian/trailer/sintel_trailer-480p.mp4",
+     "full": true,
+     "start": 0,
+     "end": 0
+   }];
+
+
+
     if(this.videoPlayer) {
       const  video = this.videoPlayer.nativeElement;
 
@@ -47,7 +53,10 @@ export class AppComponent implements OnInit {
 
         this.showVideoContainer();
         console.log('CREATE CLIPS');
-        this.createClipsFromVideo();
+
+        if(this.listVideos.length == 1){
+          this.createClipsFromVideo();
+        }
 
       });
 
@@ -80,6 +89,8 @@ export class AppComponent implements OnInit {
     this.addVideoSrc(this.videoPlayer.nativeElement, this.listVideos[idx].url, 'video/mp4');
     video.load();
     video.play();
+
+
   }
 
   public addClip( evt ){

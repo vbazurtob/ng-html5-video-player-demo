@@ -35,7 +35,9 @@
             <div *ngIf="!isClipFullVideo(idx)">
               <button type="button" mat-button><mat-icon>close</mat-icon></button>
             </div>
-            <button type="button" mat-button (click)="selectClip($event, idx)" data-full-video="true" [attr.data-index]="idx">
+            <button type="button" mat-button
+            (click)="selectClip($event, idx) " data-full-video="true" 
+            [attr.data-index]="idx">
               <div class="clip_thumb">
 
               </div>
@@ -43,6 +45,7 @@
                 {{video.name}}
               </div>
             </button>
+
             <div>
               <button type="button" mat-button (click)="editClip($event,idx)" *ngIf="!isClipFullVideo(idx)">
                 <mat-icon>edit</mat-icon>
