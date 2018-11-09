@@ -14,7 +14,7 @@ export class AppComponent implements OnInit {
   public maxDurationValue = 0;
 
   @ViewChild("videoPlayer") videoPlayer;
-  @ViewChild("currentEditClip") currentClipEdit;
+
   @ViewChild("clipFormContainer") clipFormContainer;
   @ViewChild("frmClip") frmClip;
   @ViewChild("errorClipNameTxt") errorClipNameTxt;
@@ -78,11 +78,6 @@ export class AppComponent implements OnInit {
   public selectClip(evt, idx){
     const selectedClip = evt.target;
     const video = this.videoPlayer.nativeElement;
-    console.log(selectedClip);
-
-    // const aElem = selectedClip.querySelector("a");
-    console.log(idx);
-
     video.innerHTML = '';
 
 
@@ -95,6 +90,9 @@ export class AppComponent implements OnInit {
 
   public addClip( evt ){
     const frm = evt;
+
+
+    ////////////////// TODO VALIDATE start < end //////////////////////////
 
     // if ( this.frmClip.isFormValid() === false ) {
     //   return false;
@@ -109,14 +107,22 @@ export class AppComponent implements OnInit {
 
   public editClip(evt, idx){
     const selectedClip = this.listVideos[idx];
+    const frmClipContainer = this.clipFormContainer.nativeElement;
+    frmClipContainer.style.transform= 'scale(1,1)';
+    this.frmClip.setFrmValues( selectedClip );
 
-    // this.frmClipName = selectedClip.name
-    // this.frmClipStart = selectedClip.start;
-    // this.frmClipEnd = selectedClip.end;
+    this.frmClip.setCurrentEditClip(idx);
+    //UI btns
+    this.frmClip.hideAddButton();
+    this.frmClip.showEditButton();
 
-    const currentEdit = document.getElementById("currentEditClip");
-    this.currentClipEdit.nativeElement.value = idx;
+  }
 
+  private deleteClip(evt, idx){
+    this.listVideos[idx] = null;
+    delete this.listVideos[idx];
+    this.listVideos = this.listVideos.filter( x => x != null );
+    // console.log(this.listVideos);
   }
 
   public isClipFullVideo(idx){
@@ -127,10 +133,6 @@ export class AppComponent implements OnInit {
     const frmClipContainer = this.clipFormContainer.nativeElement;
     frmClipContainer.style.transform= 'scale(1,1)';
     const emptyFrm = this.getEmptyFrmObject();
-    // emptyFrm.end = this.maxDurationValue;
-
-    console.log(emptyFrm);
-
     this.frmClip.setFrmValues( emptyFrm );
 
   }
@@ -148,6 +150,11 @@ export class AppComponent implements OnInit {
   public hideNewClipUI(){
     const frmClip = this.clipFormContainer.nativeElement;
     frmClip.style.transform= 'scale(1,0)';
+
+    //Hide edit button
+    this.frmClip.showAddButton();
+    this.frmClip.hideEditButton();
+
   }
 
   public cancelEditClip($evt){
@@ -184,13 +191,40 @@ export class AppComponent implements OnInit {
       newFrm.end = newFrm.start + clipsLength;
       acumStart = newFrm.start + clipsLength;
 
-      console.log(newFrm);
+      // console.log(newFrm);
 
       this.addClip(newFrm);
 
     }
 
   }
+
+  private updateClip( evt ){
+    const idx = this.frmClip.getCurrentEditClip();
+
+    const frm = evt;
+    const clipToEdit = this.listVideos[idx]
+
+    ////////////////// TODO VALIDATE start < end //////////////////////////
+
+    // if ( this.frmClip.isFormValid() === false ) {
+    //   return false;
+    // }
+
+    clipToEdit.name = frm.name;
+    clipToEdit.start = frm.start;
+    clipToEdit.end = frm.end;
+
+    const clipUrl = this.listVideos[0].url + "#t="+ frm.start + "," + frm.end;
+    clipToEdit.url = clipUrl;
+
+    // this.listVideos.push( frm );
+    this.hideNewClipUI();
+
+
+  }
+
+
 
 
 }

@@ -17,14 +17,25 @@
 
   </mat-form-field>
 
-  <button type="button" id="addNewClipBtn" mat-button (click)="addClipEvt($event)" [disabled]="!isFormValid()" >
-      <mat-icon>add</mat-icon>
-  </button>
-  <button type="button" id="editClipBtn" mat-button (click)="applyEditChangesEvt($event)" >
-      <mat-icon>done</mat-icon>
-  </button>
-  <button type="button" id="editClipBtn" mat-button (click)="cancelEditClipEvt($event)" >
-      <mat-icon>cancel</mat-icon>
-  </button>
+
+  <span #btnAdd>
+    <button  type="button" id="addNewClipBtn" mat-button (click)="addClipEvt($event)" [disabled]="!isFormValid()" >
+        <mat-icon>add</mat-icon>
+    </button>
+  </span>
+
+
+  <span #btnEdit>
+    <button  type="button" id="editClipBtn" mat-button (click)="applyEditChangesEvt($event)" >
+        <mat-icon>done</mat-icon>
+    </button>
+  </span>
+
+  <span #btnCancel>
+    <button  type="button" id="editClipBtn" mat-button (click)="cancelEditClipEvt($event)" >
+        <mat-icon>cancel</mat-icon>
+    </button>  
+  </span>
+
   <input type="hidden" #currentEditClip>
 </form>

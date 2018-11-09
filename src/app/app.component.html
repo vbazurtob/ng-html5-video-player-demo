@@ -33,10 +33,10 @@
 
           <mat-card *ngFor="let video of listVideos; let idx = index"  fxLayout="column" fxLayoutAlign="start stretch" class="card-clip" >
             <div *ngIf="!isClipFullVideo(idx)">
-              <button type="button" mat-button><mat-icon>close</mat-icon></button>
+              <button type="button" (click)="deleteClip($event, idx)"  mat-button><mat-icon>close</mat-icon></button>
             </div>
             <button type="button" mat-button
-            (click)="selectClip($event, idx) " data-full-video="true" 
+            (click)="selectClip($event, idx) " data-full-video="true"
             [attr.data-index]="idx">
               <div class="clip_thumb">
 
@@ -62,6 +62,8 @@
     <app-clip-editor [videoDuration]="maxDurationValue"
 
 (addClip) = "addClip($event)"
+(editClip) = "updateClip($event)"
+(cancelClip) = "cancelEditClip($event)"
 
 #frmClip
     ></app-clip-editor>

@@ -1,4 +1,4 @@
-import { Component, OnInit , Input, EventEmitter, Output} from '@angular/core';
+import { Component, OnInit , Input, EventEmitter, Output, ViewChild} from '@angular/core';
 import { FormControl, FormGroup, FormBuilder, Validators } from '@angular/forms';
 
 
@@ -15,7 +15,10 @@ export class ClipEditorComponent implements OnInit {
   @Output() cancelClip = new EventEmitter();
   @Output() editClip = new EventEmitter();
 
-
+  @ViewChild("btnEdit") btnEdit;
+  @ViewChild("btnAdd") btnAdd;
+  @ViewChild("btnCancel") btnCancel;
+  @ViewChild("currentEditClip") currentEditClip;
 
   private frmClipEditor: FormGroup;
 
@@ -118,6 +121,39 @@ export class ClipEditorComponent implements OnInit {
      }
 
      return message;
+  }
+
+  showEditButton(){
+    this.btnEdit.nativeElement.style.visibility="visible";
+  }
+
+  hideEditButton(){
+    this.btnEdit.nativeElement.style.visibility="hidden";
+
+  }
+
+  showAddButton(){
+    this.btnAdd.nativeElement.style.visibility="visible";
+  }
+
+  hideAddButton(){
+    this.btnAdd.nativeElement.style.visibility="hidden";
+  }
+
+  showCancelButton(){
+    this.btnCancel.nativeElement.style.visibility="visible";
+  }
+
+  hideCancelButton(){
+    this.btnCancel.nativeElement.style.visibility="hidden";
+  }
+
+  setCurrentEditClip(editId){
+    this.currentEditClip.nativeElement.value = editId;
+  }
+
+  getCurrentEditClip(){
+    return this.currentEditClip.nativeElement.value;
   }
 
 }
