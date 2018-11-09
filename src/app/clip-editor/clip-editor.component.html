@@ -26,7 +26,7 @@
 
 
   <span #btnEdit>
-    <button  type="button" id="editClipBtn" mat-button (click)="applyEditChangesEvt($event)" >
+    <button  type="button" id="editClipBtn" mat-button (click)="applyEditChangesEvt($event)" [disabled]="!isFormValid()"  >
         <mat-icon>done</mat-icon>
     </button>
   </span>
@@ -34,7 +34,7 @@
   <span #btnCancel>
     <button  type="button" id="editClipBtn" mat-button (click)="cancelEditClipEvt($event)" >
         <mat-icon>cancel</mat-icon>
-    </button>  
+    </button>
   </span>
 
   <input type="hidden" #currentEditClip>

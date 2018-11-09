@@ -1,5 +1,6 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 
+
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
@@ -135,6 +136,8 @@ export class AppComponent implements OnInit {
     const emptyFrm = this.getEmptyFrmObject();
     this.frmClip.setFrmValues( emptyFrm );
 
+    this.frmClip.showAddButton();
+    this.frmClip.hideEditButton();
   }
 
   public getEmptyFrmObject(){

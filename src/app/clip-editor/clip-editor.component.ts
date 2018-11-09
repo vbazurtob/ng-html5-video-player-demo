@@ -1,6 +1,7 @@
 import { Component, OnInit , Input, EventEmitter, Output, ViewChild} from '@angular/core';
 import { FormControl, FormGroup, FormBuilder, Validators } from '@angular/forms';
 
+import { isClipRangeValid } from '../validators/clip-range.validator';
 
 
 @Component({
@@ -37,7 +38,9 @@ export class ClipEditorComponent implements OnInit {
             name: ['', Validators.required],
             start: ['', [Validators.required, Validators.min(0), Validators.max(this.videoDuration)] ],
             end: ['', [Validators.required,  Validators.min(0), Validators.max(this.videoDuration)]]
-        });
+        },
+         { validator: isClipRangeValid } //('name', 'end')
+      );
   }
 
   public updateValidatorsWithMaxDuration(maxValue){
@@ -77,8 +80,14 @@ export class ClipEditorComponent implements OnInit {
   }
 
   public isFormValid(){
+
+
     return this.frmClipEditor.valid;
   }
+
+  // public isClipRangeValid(){
+  //   return this.frm.start < this.frm.end;
+  // }
 
   public setFrmValues(frm){
     this.frm['name'].setValue( frm.name );
@@ -115,8 +124,9 @@ export class ClipEditorComponent implements OnInit {
        case 'end':
         message = this.frm[fieldName].hasError('min') ? 'Value cannot be lesser than 0' :
           this.frm[fieldName].hasError('max') ? 'Value cannot be greater than ' + this.videoDuration
-          :''
-        ;
+          :
+          this.frm[fieldName].hasError('rangeNotValid')? 'Starting value from the clip cannot be greater than the ending value'
+          : ''  ;
        break;
      }
 
