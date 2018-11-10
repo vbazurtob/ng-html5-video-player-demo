@@ -3,6 +3,12 @@ import { FormControl, FormGroup, FormBuilder, Validators } from '@angular/forms'
 
 import { isClipRangeValid } from '../validators/clip-range.validator';
 
+/*
+Author: Voltaire Bazurto
+Component responsible to render the clip edit form that will be used for creating/editing clips.
+I use reactive forms with validators. I created a custom validator for checking if the starting clip nativeElement
+is lower than the ending clip time.
+*/
 
 @Component({
   selector: 'app-clip-editor',
@@ -22,7 +28,7 @@ export class ClipEditorComponent implements OnInit {
   @ViewChild("btnCancel") btnCancel;
   @ViewChild("currentEditClip") currentEditClip;
 
-  private frmClipEditor: FormGroup;
+  public frmClipEditor: FormGroup;
 
   constructor( private formBuilder: FormBuilder ) {
 
@@ -34,19 +40,17 @@ export class ClipEditorComponent implements OnInit {
   }
 
   ngOnInit() {
-    // console.log('init ' + this.videoDuration);
     this.frmClipEditor = this.formBuilder.group({
             name: ['', Validators.required],
             start: ['', [Validators.required, Validators.min(0), Validators.max(this.videoDuration)] ],
             end: ['', [Validators.required,  Validators.min(0), Validators.max(this.videoDuration)]]
         },
-         { validator: isClipRangeValid } //('name', 'end')
+         { validator: isClipRangeValid }
       );
   }
 
   public updateValidatorsWithMaxDuration(maxValue){
     this.videoDuration = maxValue;
-    // console.log('duration ' + this.videoDuration);
     this.frm.start.clearValidators();
     this.frm.start.setValidators( [ Validators.required , Validators.min(0), Validators.max(maxValue)] );
     this.frm['start'].updateValueAndValidity();
@@ -63,7 +67,6 @@ export class ClipEditorComponent implements OnInit {
   }
 
   get start(){
-    // console.log(this.frm.start.value + ' vs ' + this.videoDuration);
     return this.frm.start;
   }
 
@@ -85,10 +88,6 @@ export class ClipEditorComponent implements OnInit {
 
     return this.frmClipEditor.valid;
   }
-
-  // public isClipRangeValid(){
-  //   return this.frm.start < this.frm.end;
-  // }
 
   public setFrmValues(frm){
     this.frm['name'].setValue( frm.name );

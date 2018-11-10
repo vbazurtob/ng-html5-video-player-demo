@@ -1,13 +1,20 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 
 
+/*
+Author: Voltaire Bazurto
+Main app component class. It contains the definition of the default video to be
+chunked in clips. By default, sample clips are created when the page is loaded.
+*/
+
+
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss']
 })
 export class AppComponent implements OnInit {
-  title = 'html5videoplayer';
+  title = 'HTML5 video player using media fragments';
   public maxDurationValue = 0;
 
   @ViewChild("videoPlayer") videoPlayer;
@@ -19,6 +26,16 @@ export class AppComponent implements OnInit {
   @ViewChild("errorClipEnd") errorClipEnd;
   @ViewChild("videoContainerElement") videoContainerElement;
 
+
+  set _maxDurationValue(val){
+
+    if(this.listVideos.length == 1 && this.maxDurationValue == 0 && !isNaN(val)  ){
+      this.maxDurationValue = val; // <= order matters here. thats why duplicated line
+      this.createClipsFromVideo();
+    }else{
+      this.maxDurationValue = val;
+    }
+  }
 
   public listVideos = [];
   public frmTitle = "";
@@ -40,15 +57,13 @@ export class AppComponent implements OnInit {
 
       // Wait until video metadata is loaded
       video.addEventListener("loadedmetadata", () => {
-        this.maxDurationValue = video.duration;
-
+        // Use a setter to validate that demo clips are created just once
+        this._maxDurationValue = video.duration;
         this.frmClip.updateValidatorsWithMaxDuration(this.maxDurationValue);
 
         this.showVideoContainer();
 
-        if(this.listVideos.length == 1){
-          this.createClipsFromVideo();
-        }
+
 
       });
 
@@ -110,7 +125,6 @@ export class AppComponent implements OnInit {
     this.listVideos[idx] = null;
     delete this.listVideos[idx];
     this.listVideos = this.listVideos.filter( x => x != null );
-    // console.log(this.listVideos);
   }
 
   public isClipFullVideo(idx){
@@ -175,6 +189,7 @@ export class AppComponent implements OnInit {
 
 
   public createClipsFromVideo(){
+
     const clipsLength = this.maxDurationValue / 5;
     let i, acumStart = 0;
     for(i=0; i < 5; i++ ){
@@ -186,7 +201,6 @@ export class AppComponent implements OnInit {
       newFrm.end = newFrm.start + clipsLength;
       acumStart = newFrm.start + clipsLength;
 
-      // console.log(newFrm);
 
       this.addClip(newFrm);
 
@@ -194,7 +208,7 @@ export class AppComponent implements OnInit {
 
   }
 
-  private updateClip( evt ){
+  public updateClip( evt ){
     const idx = this.frmClip.getCurrentEditClip();
 
     const frm = evt;
@@ -206,22 +220,11 @@ export class AppComponent implements OnInit {
 
     const clipUrl = this.listVideos[0].url + "#t="+ frm.start + "," + frm.end;
     clipToEdit.url = clipUrl;
-
-    // this.listVideos.push( frm );
     this.hideNewClipUI();
-
 
   }
 
-  // hideVideoContainer(){
-  //  const videoContainer = this.videoContainerElement.nativeElement;
-  //  videoContainer.style.transform= 'scale(1,0)';
-  // }
-  //
-  // showVideoContainer(){
-  //  const videoContainer = this.videoContainerElement.nativeElement;
-  //  videoContainer.style.transform= 'scale(1,1)';
-  // }
+
 
 
 }

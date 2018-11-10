@@ -10,10 +10,10 @@
 </div>
 
 <div   class="video-container-hidden" #videoContainerElement>
-  <h2>Angular HTML5 Video Player (Media fragments examples)</h2>
+  <h2>Angular HTML5 Video Player (Media fragments example)</h2>
   <p>
     Author: Voltaire Bazurto Blacio <br>
-    2018
+    2018 All rights reserved
   </p>
 
   <div id="videoplayer_widget" fxLayout="row" fxLayoutAlign="start start" >
@@ -47,17 +47,20 @@
               </div>
             </div>
 
+            <div class="clip_thumb" fxLayout="row" fxLayoutAlign="start center">
+              <mat-icon color="accent">play_arrow</mat-icon>
+              <button type="button" mat-button
+              (click)="selectClip($event, idx) " data-full-video="true"
+              [attr.data-index]="idx"    >
 
-            <button type="button" mat-button
-            (click)="selectClip($event, idx) " data-full-video="true"
-            [attr.data-index]="idx">
-              <div class="clip_thumb">
+                <div>
+                  {{video.name}}
+                </div>
+              </button>
 
-              </div>
-              <div>
-                {{video.name}}
-              </div>
-            </button>
+            </div>
+
+
 
 
       </mat-card>

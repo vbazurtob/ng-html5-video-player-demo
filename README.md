@@ -1,3 +1,16 @@
+# NG HTML5 Video Player Demo
+This is a simple html5 video player demo built using angular 7, angular flex-layout and angular material. The application
+demonstrates the use of HTML5 video media fragments.
+
+You can find the live demo here.
+
+
 ## Build and Install dependencies
-npm install
-ng update --all
+
+1. npm install
+2. ng update --all
+
+
+### Credits
+Author: Voltaire Bazurto
+2018 All rights reserved
